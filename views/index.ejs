@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SparkIdeas — AI App Idea Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+  </div>
+
+  <div class="app">
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">✦</span>
+        <span class="logo-text">SparkIdeas</span>
+      </div>
+      <p class="tagline">Turn a spark of inspiration into your next big app</p>
+    </header>
+
+    <main class="main">
+      <section class="input-section glass-card">
+        <h1 class="title">
+          What kind of app do you want to
+          <span class="gradient-text">build?</span>
+        </h1>
+        <p class="subtitle">
+          Describe your niche, audience, or problem — our AI will craft a complete app concept for you.
+        </p>
+
+        <form id="ideaForm" class="idea-form">
+          <div class="textarea-wrap">
+            <textarea
+              id="customPrompt"
+              name="customPrompt"
+              rows="4"
+              placeholder="e.g. A fitness app for remote workers who sit all day..."
+              maxlength="500"
+              required
+            ></textarea>
+            <span class="char-count"><span id="charCount">0</span>/500</span>
+          </div>
+
+          <div class="quick-prompts">
+            <span class="quick-label">Try an example:</span>
+            <div class="prompt-chips">
+              <button type="button" class="chip" data-prompt="A mental wellness app for college students dealing with exam stress">🧠 Wellness</button>
+              <button type="button" class="chip" data-prompt="A local food discovery app connecting home cooks with neighbors">🍳 Food</button>
+              <button type="button" class="chip" data-prompt="An AI-powered language learning app for travelers">🌍 Travel</button>
+              <button type="button" class="chip" data-prompt="A sustainable fashion marketplace for thrift lovers">👗 Fashion</button>
+            </div>
+          </div>
+
+          <button type="submit" id="generateBtn" class="generate-btn">
+            <span class="btn-content">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+              </svg>
+              Generate App Idea
+            </span>
+            <span class="btn-loading hidden">
+              <span class="spinner"></span>
+              Crafting your idea...
+            </span>
+          </button>
+        </form>
+
+        <div id="errorBox" class="error-box hidden" role="alert"></div>
+      </section>
+
+      <section id="resultsSection" class="results-section hidden">
+        <div class="results-header">
+          <h2>Your App Blueprint</h2>
+          <button type="button" id="copyBtn" class="copy-btn" title="Copy to clipboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span>Copy</span>
+          </button>
+        </div>
+        <div id="resultsGrid" class="results-grid"></div>
+        <button type="button" id="newIdeaBtn" class="new-idea-btn">✨ Generate Another Idea</button>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Powered by Google Gemini AI</p>
+    </footer>
+  </div>
+
+  <script src="/script.js"></script>
+</body>
+</html>
