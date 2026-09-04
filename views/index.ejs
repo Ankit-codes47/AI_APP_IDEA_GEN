@@ -3,99 +3,232 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SparkIdeas — AI App Idea Generator</title>
+  <meta name="description" content="SparkIdeas generates creative app ideas from your topic, niche, or audience — powered by Gemini AI." />
+  <title>SparkIdeas — Your Next App Idea Starts Here</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
-  <div class="bg-orbs" aria-hidden="true">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-    <div class="orb orb-4"></div>
-  </div>
 
-  <div class="app">
-    <header class="header">
-      <div class="logo">
-        <span class="logo-icon">✦</span>
-        <span class="logo-text">SparkIdeas</span>
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="#home" class="brand" aria-label="SparkIdeas home">
+        <svg class="brand-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="currentColor"/>
+          <path d="M16 6l2.5 7.5H26l-6.5 4.7 2.5 7.5L16 21l-6 4.7 2.5-7.5L6 13.5h7.5L16 6z" fill="white"/>
+        </svg>
+        <span class="brand-name">SparkIdeas</span>
+      </a>
+
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="#about" class="nav-link">About</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#generator" class="btn btn-primary btn-sm nav-cta">Generate Idea</a>
+        <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+          <span></span><span></span><span></span>
+        </button>
       </div>
-      <p class="tagline">Turn a spark of inspiration into your next big app</p>
-    </header>
+    </div>
+  </header>
 
-    <main class="main">
-      <section class="input-section glass-card">
-        <h1 class="title">
-          What kind of app do you want to
-          <span class="gradient-text">build?</span>
-        </h1>
-        <p class="subtitle">
-          Describe your niche, audience, or problem — our AI will craft a complete app concept for you.
-        </p>
+  <main>
+    <!-- Hero -->
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <span class="badge">Powered by Gemini AI</span>
+          <h1 class="hero-title">Turn Your Ideas Into Your Next App</h1>
+          <p class="hero-subtitle">
+            Describe a problem, niche, or audience and let AI generate your next app idea.
+          </p>
+          <a href="#generator" class="btn btn-primary btn-lg">Generate an Idea ✨</a>
+        </div>
 
-        <form id="ideaForm" class="idea-form">
-          <div class="textarea-wrap">
-            <textarea
-              id="customPrompt"
-              name="customPrompt"
-              rows="4"
-              placeholder="e.g. A fitness app for remote workers who sit all day..."
-              maxlength="500"
-              required
-            ></textarea>
-            <span class="char-count"><span id="charCount">0</span>/500</span>
-          </div>
-
-          <div class="quick-prompts">
-            <span class="quick-label">Try an example:</span>
-            <div class="prompt-chips">
-              <button type="button" class="chip" data-prompt="A mental wellness app for college students dealing with exam stress">🧠 Wellness</button>
-              <button type="button" class="chip" data-prompt="A local food discovery app connecting home cooks with neighbors">🍳 Food</button>
-              <button type="button" class="chip" data-prompt="An AI-powered language learning app for travelers">🌍 Travel</button>
-              <button type="button" class="chip" data-prompt="A sustainable fashion marketplace for thrift lovers">👗 Fashion</button>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="idea-visual">
+            <div class="idea-bubble idea-bubble--input">
+              <span class="idea-dot"></span>
+              <span class="idea-line"></span>
+            </div>
+            <div class="idea-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+              </svg>
+            </div>
+            <div class="idea-bubble idea-bubble--output">
+              <span class="idea-spark">✨</span>
+              <span class="idea-line idea-line--wide"></span>
+              <span class="idea-line"></span>
+              <span class="idea-line idea-line--short"></span>
             </div>
           </div>
-
-          <button type="submit" id="generateBtn" class="generate-btn">
-            <span class="btn-content">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-              </svg>
-              Generate App Idea
-            </span>
-            <span class="btn-loading hidden">
-              <span class="spinner"></span>
-              Crafting your idea...
-            </span>
-          </button>
-        </form>
-
-        <div id="errorBox" class="error-box hidden" role="alert"></div>
-      </section>
-
-      <section id="resultsSection" class="results-section hidden">
-        <div class="results-header">
-          <h2>Your App Blueprint</h2>
-          <button type="button" id="copyBtn" class="copy-btn" title="Copy to clipboard">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="9" y="9" width="13" height="13" rx="2"/>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-            </svg>
-            <span>Copy</span>
-          </button>
         </div>
-        <div id="resultsGrid" class="results-grid"></div>
-        <button type="button" id="newIdeaBtn" class="new-idea-btn">✨ Generate Another Idea</button>
-      </section>
-    </main>
+      </div>
+    </section>
 
-    <footer class="footer">
-      <p>Powered by Google Gemini AI</p>
-    </footer>
-  </div>
+    <!-- Generator -->
+    <section id="generator" class="generator">
+      <div class="container">
+        <div class="generator-card">
+          <div class="section-header section-header--center">
+            <h2 class="section-title">What do you want to build?</h2>
+            <p class="section-desc">
+              Give us a topic, problem, niche, or audience. SparkIdeas will generate an app idea for you.
+            </p>
+          </div>
+
+          <form id="ideaForm" class="idea-form" novalidate>
+            <label for="customPrompt" class="sr-only">Describe your app idea</label>
+            <div class="textarea-wrap">
+              <textarea
+                id="customPrompt"
+                name="customPrompt"
+                rows="5"
+                placeholder="e.g. An app for college students to manage their daily study routine..."
+                maxlength="500"
+                required
+                aria-describedby="charCountHint"
+              ></textarea>
+              <span class="char-count" id="charCountHint"><span id="charCount">0</span>/500</span>
+            </div>
+
+            <div class="quick-prompts">
+              <span class="quick-label">Try an example</span>
+              <div class="prompt-chips">
+                <button type="button" class="chip" data-prompt="An app for college students to manage their daily study routine and stay productive">Student productivity</button>
+                <button type="button" class="chip" data-prompt="A fitness app that helps beginners build consistent workout habits at home">Fitness</button>
+                <button type="button" class="chip" data-prompt="A travel app that helps people plan weekend trips on a tight budget">Travel</button>
+                <button type="button" class="chip" data-prompt="An app that helps small business owners track orders and customer messages in one place">Small business</button>
+                <button type="button" class="chip" data-prompt="An educational app that makes learning math fun for middle school students">Education</button>
+              </div>
+            </div>
+
+            <button type="submit" id="generateBtn" class="btn btn-primary btn-lg btn-full">
+              <span class="btn-content">Generate App Idea ✨</span>
+              <span class="btn-loading hidden">
+                <span class="spinner" aria-hidden="true"></span>
+                Generating your idea...
+              </span>
+            </button>
+          </form>
+
+          <div id="errorBox" class="alert alert-error hidden" role="alert"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Result -->
+    <section id="resultsSection" class="results hidden" aria-live="polite">
+      <div class="container">
+        <div class="result-card">
+          <div class="result-card-header">
+            <h2 class="result-title">✨ Your App Idea</h2>
+            <div class="result-actions">
+              <button type="button" id="copyBtn" class="btn btn-secondary btn-sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                <span>Copy Idea</span>
+              </button>
+              <button type="button" id="newIdeaBtn" class="btn btn-primary btn-sm">Generate Another</button>
+            </div>
+          </div>
+          <div id="resultContent" class="result-content"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+      <div class="container">
+        <div class="section-header section-header--center">
+          <h2 class="section-title">How it works</h2>
+          <p class="section-desc">Three simple steps to your next app idea.</p>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num">01</span>
+            <h3>Enter</h3>
+            <p>Tell SparkIdeas what kind of app you want.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">02</span>
+            <h3>Generate</h3>
+            <p>AI creates an app idea based on your input.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">03</span>
+            <h3>Build</h3>
+            <p>Take the idea and start building it.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- About + Features -->
+    <section id="about" class="about">
+      <div class="container">
+        <div class="section-header section-header--center">
+          <h2 class="section-title">About SparkIdeas</h2>
+          <p class="section-desc">
+            A focused AI tool that turns your thoughts into app ideas — nothing more, nothing less.
+          </p>
+        </div>
+        <div class="features-grid">
+          <article class="feature-card">
+            <span class="feature-emoji" aria-hidden="true">💡</span>
+            <h3>AI-Powered</h3>
+            <p>Generate creative app ideas using Gemini AI.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-emoji" aria-hidden="true">⚡</span>
+            <h3>Instant Ideas</h3>
+            <p>Get an idea in seconds.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-emoji" aria-hidden="true">🎯</span>
+            <h3>Simple &amp; Focused</h3>
+            <p>Just describe what you have in mind and generate.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+      <div class="container">
+        <div class="cta-card">
+          <h2>Have an idea in mind?</h2>
+          <p>Let SparkIdeas give you a starting point.</p>
+          <a href="#generator" class="btn btn-primary btn-lg">Generate an Idea ✨</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">
+        &copy; 2026 <span class="footer-author">Ankit Kumar</span>. All rights reserved.
+      </p>
+      <a href="https://github.com/Ankit-codes47" class="footer-github" target="_blank" rel="noopener noreferrer" aria-label="Visit Ankit Kumar on GitHub">
+        <svg class="footer-github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.9.58.11.79-.25.79-.56v-2.2c-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.27-1.7-1.27-1.7-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.74 2.67 1.24 3.32.95.1-.74.4-1.24.73-1.52-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.14 1.18a10.9 10.9 0 0 1 5.71 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.58.23 2.75.11 3.04.73.8 1.18 1.83 1.18 3.09 0 4.42-2.7 5.39-5.27 5.67.42.36.79 1.08.79 2.18v3.24c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" fill="currentColor"/>
+        </svg>
+        <span>GitHub</span>
+      </a>
+    </div>
+  </footer>
 
   <script src="/script.js"></script>
 </body>
