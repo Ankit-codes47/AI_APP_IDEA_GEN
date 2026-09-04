@@ -77,14 +77,93 @@ app.post("/generate", async(req, res) => {
         })
     } catch (error) {
         console.error("Gemini API Error:", error);
-        return res.status(500).json({
+
+        const statusCode = resolveStatusCode(error);
+        const friendlyMessage = getFriendlyGeminiError(error);
+
+        return res.status(statusCode).json({
             success:false,
-            error: error.message
+            error: friendlyMessage
         })
     }
 })
 
 
+const resolveStatusCode = (error) => {
+    const rawStatus = error?.status ?? error?.code ?? error?.statusCode ?? error?.error?.status ?? error?.error?.code;
+    const numericStatus = Number(rawStatus);
 
+    if (Number.isFinite(numericStatus)) {
+        return numericStatus;
+    }
+
+    const normalized = String(rawStatus ?? "").toUpperCase();
+
+    if (normalized.includes("UNAVAILABLE") || normalized.includes("SERVICE_UNAVAILABLE")) return 503;
+    if (normalized.includes("RESOURCE_EXHAUSTED") || normalized.includes("RATE_LIMIT")) return 429;
+    if (normalized.includes("INVALID_ARGUMENT") || normalized.includes("BAD_REQUEST")) return 400;
+    if (normalized.includes("UNAUTHENTICATED") || normalized.includes("PERMISSION_DENIED") || normalized.includes("AUTH")) return 401;
+
+    return 500;
+};
+
+const getFriendlyGeminiError = (error) => {
+    const rawStatus = error?.status ?? error?.code ?? error?.statusCode ?? error?.error?.status ?? error?.error?.code;
+    const numericStatus = Number(rawStatus);
+    const message = String(error?.message ?? error?.error?.message ?? "").toLowerCase();
+
+    if (
+        numericStatus === 503 ||
+        String(rawStatus ?? "").toUpperCase().includes("UNAVAILABLE") ||
+        message.includes("unavailable") ||
+        message.includes("temporarily busy") ||
+        message.includes("service unavailable")
+    ) {
+        return "Gemini is temporarily busy. Please try again in a moment.";
+    }
+
+    if (
+        numericStatus === 429 ||
+        String(rawStatus ?? "").toUpperCase().includes("RESOURCE_EXHAUSTED") ||
+        message.includes("rate limit") ||
+        message.includes("too many requests")
+    ) {
+        return "Too many requests right now. Please wait a moment and try again.";
+    }
+
+    if (
+        numericStatus === 400 ||
+        String(rawStatus ?? "").toUpperCase().includes("INVALID_ARGUMENT") ||
+        message.includes("invalid") ||
+        message.includes("bad request")
+    ) {
+        return "Please check your input and try again.";
+    }
+
+    if (
+        numericStatus === 401 ||
+        numericStatus === 403 ||
+        String(rawStatus ?? "").toUpperCase().includes("UNAUTHENTICATED") ||
+        String(rawStatus ?? "").toUpperCase().includes("PERMISSION_DENIED") ||
+        message.includes("unauthorized") ||
+        message.includes("forbidden") ||
+        message.includes("api key") ||
+        message.includes("authentication")
+    ) {
+        return "There is a problem with the AI service configuration.";
+    }
+
+    if (
+        numericStatus === 500 ||
+        numericStatus === 502 ||
+        numericStatus === 504 ||
+        message.includes("internal") ||
+        message.includes("server error")
+    ) {
+        return "Something went wrong while generating your idea. Please try again.";
+    }
+
+    return "Something went wrong while generating your idea. Please try again.";
+};
 //! export app for vercel
 export default app;
